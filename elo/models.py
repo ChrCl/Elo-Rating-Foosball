@@ -32,4 +32,4 @@ class Match(models.Model):
     datetime = models.DateTimeField()
 
     class Meta:
-        ordering = ['-datetime']
+        ordering = ['-datetime', '-id']
