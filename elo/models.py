@@ -25,10 +25,10 @@ class Team(models.Model):
 
 
 class Match(models.Model):
-    team1 = models.ForeignKey(Team, related_name='t1', on_delete=models.PROTECT)
-    team2 = models.ForeignKey(Team, related_name='t2', on_delete=models.PROTECT)
-    score1 = models.IntegerField(default=0, blank=False)
-    score2 = models.IntegerField(default=0, blank=False)
+    teamRed = models.ForeignKey(Team, related_name='Red', on_delete=models.PROTECT)
+    teamBlue = models.ForeignKey(Team, related_name='Blue', on_delete=models.PROTECT)
+    scoreRed = models.IntegerField(default=0, blank=False)
+    scoreBlue = models.IntegerField(default=0, blank=False)
     datetime = models.DateTimeField()
 
     class Meta:
