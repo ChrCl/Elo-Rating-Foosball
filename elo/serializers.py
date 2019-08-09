@@ -6,7 +6,7 @@ class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Player
-        fields = '__all__'
+        fields = ['name']
 
 class TeamSerializer(serializers.ModelSerializer):
 
