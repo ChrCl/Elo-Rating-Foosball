@@ -4,21 +4,19 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 import statistics
+import logging
 
-
-# TO DO
-# remove view for team creation url: /teams
-# backtrack eloRank/recalcul if create date is < object match
+logger = logging.getLogger(__name__)
 
 class PlayerList(generics.ListCreateAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
 
     def create(self, request, *args, **kwargs):
+        partners = self.queryset.all()
         ret = super().create(request, *args, **kwargs)
         player = ret.data
-        player = Player.objects.get(pk=player['id'])
-        partners = self.queryset.all()
+        player = Player.objects.get(name=player['name'])
         self.createTeams(partners, player)
         return ret
 
@@ -60,13 +58,15 @@ class MatchList(generics.ListCreateAPIView):
         eloRankBlue = statistics.mean([teamBlue.player1.rank, teamBlue.player2.rank])
         elos = self.eloRank(eloRankRed, eloRankBlue, scoreRed, scoreBlue, teamRed, teamBlue)
 
+        logger.info('Computed ELO for Red (' + str(teamRed) + ') and Blue (' + str(teamBlue) + ') is ' + str(elos))
+
         teamRed.player1.rank = teamRed.player1.rank + elos['plusEloRed']
-        teamRed.player1.save()
         teamRed.player2.rank = teamRed.player2.rank + elos['plusEloRed']
-        teamRed.player2.save()
         teamBlue.player1.rank = teamBlue.player1.rank + elos['plusEloBlue']
-        teamBlue.player1.save()
         teamBlue.player2.rank = teamBlue.player2.rank + elos['plusEloBlue']
+        teamRed.player1.save()
+        teamRed.player2.save()
+        teamBlue.player1.save()
         teamBlue.player2.save()
         return
 
@@ -112,6 +112,8 @@ class MatchList(generics.ListCreateAPIView):
         elif scoreRed == scoreBlue:
             redResult = 0.5
             blueResult = 0.5
+            self.updateWinTotalMatch(teamRed, '')
+            self.updateWinTotalMatch(teamBlue, '')
         else:
             print("result impossible")
             return false
