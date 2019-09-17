@@ -8,11 +8,15 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: eloRoot$
+      MYSQL_USER: elo_user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: elo
     volumes:
       - /tmp/mariadb:/var/lib/mysql
     networks:
-      - backend
-
+      backend:
+        aliases:
+          - db
 
   adminer:
     image: adminer

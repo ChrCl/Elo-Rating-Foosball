@@ -75,7 +75,7 @@ LOGGING = {
     }
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,6 +129,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'mariadb': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'elo',
+        'USER': 'elo_user',
+        'PASSWORD': 'password',
+        'HOST': 'db',
+        # 'PORT': '',
     }
 }
 
