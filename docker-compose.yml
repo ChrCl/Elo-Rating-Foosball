@@ -27,6 +27,17 @@ services:
       - backend
       - frontend
 
+  django:
+    image: elo_django:0.0
+    build:
+      context: .
+    restart: always
+    ports:
+      - 8077:8000
+    networks:
+      - backend
+      - frontend
+
 networks:
   backend:
     driver: bridge

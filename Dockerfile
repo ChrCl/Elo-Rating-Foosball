@@ -12,6 +12,6 @@ COPY manage.py .
 COPY elo/ elo/
 COPY elo_rating_foosball/ elo_rating_foosball/
 
-EXPOSE 80
+EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
+CMD ["python", "manage.py"]
