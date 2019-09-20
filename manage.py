@@ -18,8 +18,8 @@ def main():
     if len(sys.argv)>1:
         execute_from_command_line(sys.argv)
     else:
-        execute_from_command_line(['manage.py','migrate'])
         execute_from_command_line(['manage.py','makemigrations'])
+        execute_from_command_line(['manage.py','migrate','--run-syncdb'])
         execute_from_command_line(['manage.py','runserver','0.0.0.0:8000'])
 
 if __name__ == '__main__':
