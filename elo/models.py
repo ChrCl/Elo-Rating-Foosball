@@ -7,6 +7,7 @@ class Player(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=False)
     rank = models.IntegerField(default=1500)
     win = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
+    draw = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
     totalMatch = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
 
     def __str__(self):
@@ -20,6 +21,7 @@ class Team(models.Model):
     player1 = models.ForeignKey(Player, related_name='p1', on_delete=models.PROTECT)
     player2 = models.ForeignKey(Player, related_name='p2', on_delete=models.PROTECT)
     win = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
+    draw = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
     totalMatch = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], blank=False)
 
     def __str__(self):
@@ -38,3 +40,22 @@ class Match(models.Model):
 
     class Meta:
         ordering = ['-datetime', '-id']
+
+
+class Playerhistory(models.Model):
+    RESULT_LIST = (
+        ('W', 'Win'),
+        ('D', 'Draw'),
+        ('L', 'Loose'),
+    )
+    
+    player = models.ForeignKey(Player, related_name='player', on_delete=models.PROTECT)
+    match = models.ForeignKey(Match, related_name='match', on_delete=models.PROTECT)
+    result = models.CharField(max_length=1, choices=RESULT_LIST)
+    rank = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['-rank']
