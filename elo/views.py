@@ -1,5 +1,5 @@
-from elo.models import Player, Team, Match
-from elo.serializers import PlayerSerializer, TeamSerializer, MatchSerializer
+from elo.models import Player, Team, Match, Playerhistory
+from elo.serializers import PlayerSerializer, TeamSerializer, MatchSerializer, PlayerhistorySerializer
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -50,10 +50,12 @@ class MatchList(generics.ListCreateAPIView):
         match = ret.data
         teamRed = Team.objects.get(pk=match['teamRed'])
         teamBlue = Team.objects.get(pk=match['teamBlue'])
-        self.computeElo(teamRed, match['scoreRed'], teamBlue, match['scoreBlue'])
+        self.computeElo(teamRed, teamBlue, match)
         return ret
 
-    def computeElo(self, teamRed, scoreRed, teamBlue, scoreBlue):
+    def computeElo(self, teamRed, teamBlue, match):
+        scoreRed = match['scoreRed']
+        scoreBlue = match['scoreBlue']
         eloRankRed = statistics.mean([teamRed.player1.rank, teamRed.player2.rank])
         eloRankBlue = statistics.mean([teamBlue.player1.rank, teamBlue.player2.rank])
         elos = self.eloRank(eloRankRed, eloRankBlue, scoreRed, scoreBlue, teamRed, teamBlue)
@@ -64,6 +66,11 @@ class MatchList(generics.ListCreateAPIView):
         teamRed.player2.rank = teamRed.player2.rank + elos['plusEloRed']
         teamBlue.player1.rank = teamBlue.player1.rank + elos['plusEloBlue']
         teamBlue.player2.rank = teamBlue.player2.rank + elos['plusEloBlue']
+        matchObj = Match.objects.get(pk=match['id'])
+        Playerhistory.objects.create(player=teamRed.player1, match=matchObj, result=elos['redResult'], rank=teamRed.player1.rank)
+        Playerhistory.objects.create(player=teamRed.player2, match=matchObj, result=elos['redResult'], rank=teamRed.player2.rank)
+        Playerhistory.objects.create(player=teamBlue.player1, match=matchObj, result=elos['blueResult'], rank=teamBlue.player1.rank)
+        Playerhistory.objects.create(player=teamBlue.player2, match=matchObj, result=elos['blueResult'], rank=teamBlue.player2.rank)
         teamRed.player1.save()
         teamRed.player2.save()
         teamBlue.player1.save()
@@ -72,13 +79,20 @@ class MatchList(generics.ListCreateAPIView):
 
     def updateWinTotalMatch(self, team, result):
         if result == 'win':
-            team.player1.win = team.player1.win +1
-            team.player2.win = team.player2.win +1
+            team.player1.win += 1
+            team.player2.win += 1
+            team.win += 1
+        elif result == 'draw':
+            team.player1.draw += 1
+            team.player2.draw += 1
+            team.draw += 1
 
-        team.player1.totalMatch = team.player1.totalMatch +1
-        team.player2.totalMatch = team.player2.totalMatch +1
+        team.player1.totalMatch += 1
+        team.player2.totalMatch += 1
+        team.totalMatch += 1
         team.player1.save()
         team.player2.save()
+        team.save()
         return
 
     def estimation(self, eloRank, eloRankAdv):
@@ -88,6 +102,7 @@ class MatchList(generics.ListCreateAPIView):
         return estimation
 
     def newElo(self, eloRank, const, result, estimation):
+        logger.info('New ELO ' + str(result) + ' - ' + str(estimation) + ' * ' + str(const) + ' + ' + str(eloRank) + 'types eloRank=' + str(type(eloRank)) + ', const=' + str(type(const)) + ', result=' + str(type(result)) + ', estimation=' + str(type(estimation)))
         newElo = result-estimation
         newElo = const*newElo
         newElo = eloRank+newElo
@@ -98,32 +113,45 @@ class MatchList(generics.ListCreateAPIView):
         estimationBlue = self.estimation(eloRankBlue, eloRankRed)
         redConst = self.constante(eloRankRed)
         blueConst = self.constante(eloRankBlue)
+        redResult = 'D'
+        blueResult = 'D'
 
         if scoreRed > scoreBlue:
-            redResult = 1.0
-            blueResult = 0.0
+            redScore = 1.0
+            blueScore = 0.0
+            redResult = 'W'
+            blueResult = 'L'
             self.updateWinTotalMatch(teamRed, 'win')
             self.updateWinTotalMatch(teamBlue, '')
         elif scoreBlue >scoreRed:
-            blueResult = 1.0
-            redResult = 0.0
+            redScore = 0.0
+            blueScore = 1.0
+            redResult = 'L'
+            blueResult = 'W'
             self.updateWinTotalMatch(teamRed, '')
             self.updateWinTotalMatch(teamBlue, 'win')
         elif scoreRed == scoreBlue:
-            redResult = 0.5
-            blueResult = 0.5
+            redScore = 0.5
+            blueScore = 0.5
             self.updateWinTotalMatch(teamRed, '')
             self.updateWinTotalMatch(teamBlue, '')
         else:
             print("result impossible")
             return false
 
-        newEloRed = self.newElo(eloRankRed, redConst, redResult, estimationRed)
-        newEloBlue = self.newElo(eloRankBlue, blueConst, blueResult, estimationBlue)
+        newEloRed = self.newElo(eloRankRed, redConst, redScore, estimationRed)
+        newEloBlue = self.newElo(eloRankBlue, blueConst, blueScore, estimationBlue)
 
         plusEloRed = newEloRed - eloRankRed
         plusEloBlue = newEloBlue - eloRankBlue
-        return {'newEloRed': newEloRed, 'newEloBlue': newEloBlue, 'plusEloRed': plusEloRed, 'plusEloBlue': plusEloBlue}
+        return {
+            'newEloRed': newEloRed,
+            'newEloBlue': newEloBlue,
+            'plusEloRed': plusEloRed,
+            'plusEloBlue': plusEloBlue,
+            'redResult': redResult,
+            'blueResult': blueResult
+        }
 
     def constante(self, elo):
         if elo < 1000.0:
@@ -143,6 +171,10 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
+class PlayerhistoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Playerhistory.objects.all()
+    serializer_class = PlayerhistorySerializer
+    lookup_field = 'player'
 
 def playerDetails():
     players = Player.objects.all()

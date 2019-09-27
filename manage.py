@@ -18,7 +18,10 @@ def main():
     if len(sys.argv)>1:
         execute_from_command_line(sys.argv)
     else:
-        execute_from_command_line(['manage.py','makemigrations'])
+        try:
+            execute_from_command_line(['manage.py','makemigrations'])
+        except:
+            print("Oops!",sys.exc_info()[0],"occured.")
         execute_from_command_line(['manage.py','migrate','--run-syncdb'])
         execute_from_command_line(['manage.py','runserver','0.0.0.0:8000'])
 

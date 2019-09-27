@@ -29,6 +29,7 @@ class Team(models.Model):
 
     class Meta:
         ordering = ['id']
+        unique_together = [['player1', 'player2'],['player2', 'player1']]
 
 
 class Match(models.Model):
@@ -48,14 +49,15 @@ class Playerhistory(models.Model):
         ('D', 'Draw'),
         ('L', 'Loose'),
     )
-    
+
     player = models.ForeignKey(Player, related_name='player', on_delete=models.PROTECT)
     match = models.ForeignKey(Match, related_name='match', on_delete=models.PROTECT)
     result = models.CharField(max_length=1, choices=RESULT_LIST)
     rank = models.IntegerField()
 
     def __str__(self):
-        return self.name
+        return 'Player: %s  %s for match %s, new rank is %s' % (self.player, self.result, self.match, self.rank)
 
     class Meta:
         ordering = ['-rank']
+        unique_together = [['player', 'match']]

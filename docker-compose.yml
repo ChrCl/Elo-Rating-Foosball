@@ -20,6 +20,8 @@ services:
 
   adminer:
     image: adminer
+    depends_on:
+      - "mariadb"
     restart: always
     ports:
       - 8090:8080
@@ -31,6 +33,8 @@ services:
     image: elo_django:0.0
     build:
       context: .
+    depends_on:
+      - "mariadb"
     restart: always
     ports:
       - 8077:8000
