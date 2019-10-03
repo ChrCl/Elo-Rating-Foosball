@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { EloService } from '../elo.service';
+
 @Component({
   selector: 'app-view-player',
   templateUrl: './view-player.component.html',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewPlayerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private eloService: EloService) { }
 
   ngOnInit() {
   }
