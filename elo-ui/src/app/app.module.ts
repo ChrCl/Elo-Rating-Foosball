@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
+import { ViewPlayerComponent } from './view-player/view-player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreateMatchComponent
+    CreateMatchComponent,
+    ViewPlayerComponent
   ],
   imports: [
     BrowserModule,
