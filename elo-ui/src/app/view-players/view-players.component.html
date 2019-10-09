@@ -1,1 +1,11 @@
-<p>view-players works!</p>
+<h2>Players</h2>
+
+<ul class="players">
+  <li *ngFor="let player of players">
+    <a routerLink="/player/{{player.id}}">
+      <span class="badge">{{player.id}}</span> {{player.name}}
+    </a>
+    <button class="delete" title="delete player"
+      (click)="delete(player)">x</button>
+  </li>
+</ul>
