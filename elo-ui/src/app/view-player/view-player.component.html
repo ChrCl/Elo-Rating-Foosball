@@ -1,1 +1,12 @@
-<p>view-player works!</p>
+<div *ngIf="player">
+  <h2>{{player.name | uppercase}} Details</h2>
+  <div>
+    <label>Name:</label><span>{{player.name}}</span>
+    <label>Rank:</label><span>{{player.rank}}</span>
+    <label>Matches:</label><span>{{player.totalMatch}} played</span>,
+    <span>{{player.win}} won</span>,
+    <span>{{player.totalMatch - (player.win + player.draw)}} lost</span>,
+    <span>{{player.draw}} draw.</span>
+  </div>
+  <button (click)="goBack()">go back</button>
+</div>

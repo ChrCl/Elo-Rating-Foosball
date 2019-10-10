@@ -52,13 +52,21 @@ export class EloService {
   }
 
   getPlayers(): Observable<Object> {
-    const url = `${this.djangoUrl}/players/?format=json`;
+    const url = `${this.djangoUrl}/players/`;
     return this.http.get(url, this.httpOptions)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
+        tap(_ => this.log('fetched players')),
         catchError(this.handleError('getPlayers', []))
       );
   }
 
+  getPlayer(id: number): Observable<Object> {
+    const url = `${this.djangoUrl}/player/${id}/`;
+    return this.http.get(url, this.httpOptions)
+      .pipe(
+        tap(_ => this.log(`fetched player id=${id}`)),
+        catchError(this.handleError(`getPlayer id=${id}`,[]))
+    );
+  }
 
 }
