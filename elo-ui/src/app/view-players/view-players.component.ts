@@ -19,9 +19,7 @@ export class ViewPlayersComponent implements OnInit {
 
   getPlayers() {
     this.eloService.getPlayers()
-      .subscribe(players => {
-        this.players = players; console.log(players)
-      });
+      .subscribe(players => this.players = players);
   }
 
 }
