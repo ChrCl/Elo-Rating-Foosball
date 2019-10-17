@@ -1,13 +1,13 @@
 <div id="search-component">
 
   <label for="search-box">Player:</label>
-  <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+  <input #searchBox id="search-box" (input)="search(searchBox.value)" [formControl]="player"/>
 
   <ul class="search-result">
     <li *ngFor="let player of players$ | async" >
-      <a routerLink="/player/{{player.id}}">
+      <span (click)="selectPlayer(player)">
         {{player.name}}
-      </a>
+      </span>
     </li>
   </ul>
 </div>

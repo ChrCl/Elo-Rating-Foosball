@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -12,6 +13,9 @@ import { EloService } from '../elo.service';
 })
 export class SearchPlayerComponent implements OnInit {
   players$: Observable<Object>;
+  player = new FormControl('');
+  selectedPlayer = null;
+
   private searchTerms = new Subject<string>();
 
   constructor(private eloService: EloService) { }
@@ -19,6 +23,16 @@ export class SearchPlayerComponent implements OnInit {
   // Push a search term into the observable stream.
   search(term: string): void {
     this.searchTerms.next(term);
+  }
+
+  selectPlayer(player: Object): void {
+    if (player['name']) {
+      // Stores the player object
+      this.player.setValue(player['name']);
+      this.selectedPlayer = player;
+      // remove suggestion list
+      this.search('');
+    }
   }
 
   ngOnInit() {
