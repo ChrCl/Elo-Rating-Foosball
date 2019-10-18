@@ -9,6 +9,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
 import { SearchPlayerComponent } from './search-player/search-player.component';
 import { ViewPlayerComponent } from './view-player/view-player.component';
 import { ViewPlayersComponent } from './view-players/view-players.component';
+import { SearchTeamComponent } from './search-team/search-team.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ViewPlayersComponent } from './view-players/view-players.component';
     CreateMatchComponent,
     SearchPlayerComponent,
     ViewPlayerComponent,
-    ViewPlayersComponent
+    ViewPlayersComponent,
+    SearchTeamComponent
   ],
   imports: [
     BrowserModule,

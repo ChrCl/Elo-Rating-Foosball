@@ -1,6 +1,6 @@
 <div id="search-component">
 
-  <label for="search-box">Player:</label>
+  <label for="search-box">{{label}}:</label>
   <input #searchBox id="search-box" (input)="search(searchBox.value)" [formControl]="player"/>
 
   <ul class="search-result">

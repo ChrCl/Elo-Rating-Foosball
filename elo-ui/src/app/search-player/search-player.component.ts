@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { Observable, Subject } from 'rxjs';
@@ -14,6 +14,7 @@ import { EloService } from '../elo.service';
 export class SearchPlayerComponent implements OnInit {
   players$: Observable<Object>;
   player = new FormControl('');
+  @Input() label: string;
   selectedPlayer = null;
 
   private searchTerms = new Subject<string>();

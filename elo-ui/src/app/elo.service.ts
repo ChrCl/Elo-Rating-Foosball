@@ -94,7 +94,6 @@ export class EloService {
             let player = res[r];
             let name = player.name.trim().toLowerCase();
             if (name.includes(searchedTerm)) {
-              console.log(name);
               result.push(player);
             };
           }
