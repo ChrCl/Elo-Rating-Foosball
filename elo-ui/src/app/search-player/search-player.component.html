@@ -4,8 +4,8 @@
   <input #searchBox id="search-box" (input)="search(searchBox.value)" [formControl]="player"/>
 
   <ul class="search-result">
-    <li *ngFor="let player of players$ | async" >
-      <span (click)="selectPlayer(player)">
+    <li *ngFor="let player of players$ | async" (click)="selectPlayer(player)">
+      <span>
         {{player.name}}
       </span>
     </li>
