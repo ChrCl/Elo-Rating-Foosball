@@ -70,7 +70,9 @@ export class EloService {
       );
   }
 
-  searchPlayers(term: string): Observable<Object> {
+  searchPlayers(request: Object): Observable<Object> {
+    let term = request['term'];
+    let alreadySelected = request['alreadySelected'];
     if (!term.trim()) {
       return of([]);
     }
@@ -79,10 +81,21 @@ export class EloService {
     // Get the observable player list from API
     const players = this.getPlayers();
 
+    let isAlreadySelected = (player) => {
+      if (alreadySelected) {
+        for (let i in alreadySelected) {
+          if (alreadySelected[i] && alreadySelected[i]['id'] == player['id']) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     // Define the filtering function as an Observable consumer
     // The function takes the observable in args and MUST return
     // a function to unsubscribe the observable resources
-    let filterPlayers = function(observer) {
+    let filterPlayers = (observer) => {
 
       // On results
       players.subscribe({
@@ -93,7 +106,7 @@ export class EloService {
           for (let r in res) {
             let player = res[r];
             let name = player.name.trim().toLowerCase();
-            if (name.includes(searchedTerm)) {
+            if (name.includes(searchedTerm) && !isAlreadySelected(player)) {
               result.push(player);
             };
           }
