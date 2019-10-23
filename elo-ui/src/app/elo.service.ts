@@ -129,9 +129,20 @@ export class EloService {
     return new Observable(filterPlayers);
   }
 
-  // getTeam(player1: string, player2: string): Observable<Object> {
-  //   const url = `${this.djangoUrl}/player/${id}/`;
-  // }
+  getTeam(players: Object[]): Observable<Object> {
+    if (!players || players.length < 2) {
+      return of([]);
+    }
+    let id1 = Math.max(players[0]['id'], players[1]['id']);
+    let id2 = Math.min(players[0]['id'], players[1]['id']);
+    let url = `${this.djangoUrl}/teams/?player1=${id1}&player2=${id2}`;
+    console.log("Get team for players " + id1 + " and " + id2);
+    return this.http.get(url, this.httpOptions)
+      .pipe(
+        tap(_ => this.log(`fetched team id1=${id1}, id2=${id2}`)),
+        catchError(this.handleError(`getTeam id1=${id1}, id2=${id2}`,[]))
+      );
+  }
 
   // createMatch(match: Match) {
   //   const url = `${this.djangoUrl}/matches/`;

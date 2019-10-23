@@ -1,4 +1,9 @@
 <h1>team red</h1>
-<app-search-team></app-search-team>
+<app-search-team [label]="red" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
+<span>Selected: {{teamRedName}}</span>
 <h1>team blue</h1>
-<app-search-team></app-search-team>
+<app-search-team [label]="blue" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
+<span>Selected: {{teamBlueName}}</span>
+<div>
+<span>Match form status: {{ status }}</span>
+</div>

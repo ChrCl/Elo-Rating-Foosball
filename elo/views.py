@@ -3,6 +3,7 @@ from elo.serializers import PlayerSerializer, TeamSerializer, MatchSerializer, P
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
+from url_filter.integrations.drf import DjangoFilterBackend
 import statistics
 import logging
 
@@ -36,6 +37,8 @@ class PlayerDetail(generics.RetrieveUpdateDestroyAPIView):
 class TeamList(generics.ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['player1', 'player2']
 
 class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Team.objects.all()

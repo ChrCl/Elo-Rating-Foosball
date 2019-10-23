@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 
 import { EloService } from '../elo.service';
 import { TeamService } from '../team.service';
@@ -16,11 +16,17 @@ export class SearchTeamComponent implements OnInit {
 
   players: Object[] = [null, null];
 
+  @Input() label: string;
+  @Output() selectedTeam = new EventEmitter<Object>();
+
   constructor(private eloService: EloService,
     private teamService: TeamService) { }
 
   onSelectedPlayer(event: Object) {
-    console.log("Received event " + JSON.stringify(event));
+    let selectedTeam = this.selectedTeam;
+    let status = this.status;
+    let label = this.label;
+
     if (event) {
       let player = event['player'];
       if (event['label'] === this.player1) {
@@ -32,7 +38,21 @@ export class SearchTeamComponent implements OnInit {
       }
       this.teamService.addPlayer(player);
       if (this.players[0] && this.players[1]) {
-        this.status = "OK";
+        this.eloService.getTeam(this.players).subscribe({
+
+          next(res) {
+            if (res && Object.keys(res).length == 1) {
+              let team = res[0];
+              selectedTeam.emit({team: team, label: label});
+            }
+          },
+
+          complete() {
+            status = "OK";
+          }
+
+        });
+
       }
     }
   }
