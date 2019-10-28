@@ -1,9 +1,27 @@
-<h1>team red</h1>
-<app-search-team [label]="red" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
-<span>Selected: {{teamRedName}}</span>
-<h1>team blue</h1>
-<app-search-team [label]="blue" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
-<span>Selected: {{teamBlueName}}</span>
-<div>
-<span>Match form status: {{ status }}</span>
+<div class="container">
+  <div class="card-deck">
+
+    <div class="card border mb-3 teamred">
+      <div class="card-header">Red</div>
+      <div class="card-body">
+        <app-search-team [label]="red" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
+        <span>Selected: {{teamRedName}}</span>
+      </div>
+    </div>
+
+    <div class="card border mb-3 teamblue">
+      <div class="card-header">Blue</div>
+      <div class="card-body">
+        <app-search-team [label]="blue" (selectedTeam)="onSelectedTeam($event)"></app-search-team>
+        <span>Selected: {{teamBlueName}}</span>
+      </div>
+    </div>
+
+    <div class="card border mb-3">
+      <div class="card-body">
+        <span>Match form status: {{ status }}</span>
+      </div>
+    </div>
+
+  </div>
 </div>

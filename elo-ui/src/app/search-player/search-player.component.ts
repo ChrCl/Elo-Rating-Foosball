@@ -31,6 +31,7 @@ export class SearchPlayerComponent implements OnInit {
     }
   }
 
+  // A player directly selected in the list
   selectPlayer(player: Object): void {
     if (player['name']) {
       // Stores the player object
@@ -39,6 +40,29 @@ export class SearchPlayerComponent implements OnInit {
       // remove suggestion list
       this.searchTerms.next({term: '', alreadySelected: this.alreadySelected});
     }
+  }
+
+  // Tests if the player suggestion is the current selected player
+  isSelected(player: Object): boolean {
+    if (player && this.player) {
+      return player['name'].toLowerCase() === this.player.value.toLowerCase();
+    }
+    return false;
+  }
+
+  // Down arrow key pressed, choose next player
+  selectNext(): void {
+    console.log("Next " + this.label);
+  }
+
+  // Up arrow key pressed, choose previous player
+  selectPrevious(): void {
+    console.log("Previous " + this.label);
+  }
+
+  // Enter key pressed, validated selection
+  select(): void {
+    console.log("Select " + this.label);
   }
 
   ngOnInit() {

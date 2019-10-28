@@ -1,13 +1,20 @@
-<div id="search-component">
+<div class="form-group" id="search-component">
 
-  <label for="search-box">{{label}}:</label>
-  <input #searchBox id="search-box" (input)="search(searchBox.value)" [formControl]="player"/>
+  <input class="form-control"
+    #searchBox id="search-box"
+    (input)="search(searchBox.value)"
+    (keyup.arrowup)="selectPrevious()"
+    (keyup.arrowdown)="selectNext()"
+    (keyup.enter)="select()"
+    [formControl]="player"
+    type="text"
+    placeholder="{{label}}"/>
 
   <ul class="search-result">
     <li *ngFor="let player of players$ | async" (click)="selectPlayer(player)">
-      <span>
-        {{player.name}}
-      </span>
+      <span *ngIf="isSelected(player)" class="active">{{player.name}}</span>
+      <span *ngIf="!isSelected(player)">{{player.name}}</span>
     </li>
   </ul>
+
 </div>
