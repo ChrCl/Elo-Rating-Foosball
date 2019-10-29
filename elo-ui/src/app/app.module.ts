@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule }    from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
@@ -24,7 +27,9 @@ import { SearchTeamComponent } from './search-team/search-team.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropDownListModule,
+    DateTimePickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
