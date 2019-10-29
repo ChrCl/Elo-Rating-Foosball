@@ -1,0 +1,12 @@
+FROM node:10 as angular
+
+RUN mkdir /angular
+COPY elo-ui/ /angular/elo-ui/
+WORKDIR /angular/elo-ui
+
+RUN npm install && npm run build --production
+
+FROM httpd:2.4-alpine
+
+COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY --from=angular /angular/elo-ui/dist/elo-ui/ /usr/local/apache2/htdocs/

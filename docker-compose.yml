@@ -16,7 +16,7 @@ services:
     networks:
       backend:
         aliases:
-          - db
+          - "db"
 
   adminer:
     image: adminer
@@ -33,6 +33,7 @@ services:
     image: elo_django:0.0
     build:
       context: .
+      dockerfile: Dockerfile.django
     depends_on:
       - "mariadb"
     restart: always
@@ -40,6 +41,20 @@ services:
       - 8077:8000
     networks:
       - backend
+      - frontend
+
+  front:
+    image: elo_front:0.0
+    build:
+      context: .
+      dockerfile: Dockerfile.angular
+    depends_on:
+      - "django"
+      - "adminer"
+    restart: always
+    ports:
+      - 8078:80
+    networks:
       - frontend
 
 networks:

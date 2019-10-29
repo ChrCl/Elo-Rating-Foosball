@@ -1,0 +1,6 @@
+.git/
+db/
+elo/__pycache__/
+elo_rating_foosball/__pycache__/
+elo-ui/dist/
+elo-ui/node_modules/
