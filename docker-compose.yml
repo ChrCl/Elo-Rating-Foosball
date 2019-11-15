@@ -7,7 +7,7 @@ services:
     image: mariadb:10.4
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: eloRoot$
+      MYSQL_ROOT_PASSWORD: eloRoot
       MYSQL_USER: elo_user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: elo

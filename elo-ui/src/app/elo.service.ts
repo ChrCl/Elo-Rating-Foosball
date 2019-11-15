@@ -12,7 +12,7 @@ import { Match } from './match';
 })
 export class EloService {
 
-  private djangoUrl = 'http://localhost:8000';  // URL to web api
+  private djangoUrl = '/api';  // URL to web api
 
   private httpOptions: any;
 
