@@ -1,0 +1,11 @@
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Players" aria-label="Players" matInput [formControl]="formControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="showPlayer">
+      <mat-option *ngFor="let player of filterPlayerList | async" [value]="player">
+          {{player.name}}
+      </mat-option>
+      </mat-autocomplete>
+  </mat-form-field>
+</form>
+

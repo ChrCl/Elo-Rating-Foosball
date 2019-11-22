@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule }    from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
@@ -13,6 +14,10 @@ import { SearchPlayerComponent } from './search-player/search-player.component';
 import { ViewPlayerComponent } from './view-player/view-player.component';
 import { ViewPlayersComponent } from './view-players/view-players.component';
 import { SearchTeamComponent } from './search-team/search-team.component';
+import { SelectPlayerComponent } from './select-player/select-player.component';
+
+
+import { MaterialModule } from './material-module';
 
 @NgModule({
   declarations: [
@@ -21,15 +26,19 @@ import { SearchTeamComponent } from './search-team/search-team.component';
     SearchPlayerComponent,
     ViewPlayerComponent,
     ViewPlayersComponent,
-    SearchTeamComponent
+    SearchTeamComponent,
+    SelectPlayerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     DropDownListModule,
-    DateTimePickerModule
+    DateTimePickerModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
