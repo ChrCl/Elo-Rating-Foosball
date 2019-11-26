@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -17,6 +17,10 @@ export class SelectPlayerComponent implements OnInit {
   playerList;
   filterPlayerList: Observable<any>;
 
+  @Input() label: string;
+  @Input() alreadySelected: Object[];
+  @Output() selectedPlayer = new EventEmitter<Object>();
+
   ngOnInit() {
 
     this.playersList();
@@ -29,12 +33,19 @@ export class SelectPlayerComponent implements OnInit {
 
   }
 
+  private _filterAlreadySelected(player: object) {
+    let res = this.alreadySelected.filter(alreadySelect => alreadySelect['id'] === player['id']).length === 0;
+    console.log(`Is ${player['name']} already selected? ${this.alreadySelected} - ${res}`);
+    return res;
+  }
+
   private _filterPlayer(name: string) {
 
     const filterValue = name.toLowerCase();
-    return this.playerList.filter(player =>
-      player.name.toLowerCase().indexOf(filterValue) === 0
-    );
+    return this.playerList.filter(player => this._filterAlreadySelected(player)).filter(player => {
+      console.log(`Filter player ${player.name} for ${name}`);
+      return player.name.toLowerCase().indexOf(filterValue) >= 0;
+    });
 
   }
 
@@ -49,7 +60,6 @@ export class SelectPlayerComponent implements OnInit {
           startWith(''),
           map(value => typeof value === 'string' ? value : value.name),
           map(name => name ? this._filterPlayer(name) : this.playerList.slice())
-
         );
 
       });

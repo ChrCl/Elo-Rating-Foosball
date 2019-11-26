@@ -1,3 +1,4 @@
+<app-select-player [label]="player1" [alreadySelected]="alreadySelectedPlayers()" (selectedPlayer)="onSelectedPlayer($event)"></app-select-player>
 <app-search-player [label]="player1" [alreadySelected]="alreadySelectedPlayers()" (selectedPlayer)="onSelectedPlayer($event)"></app-search-player>
 <app-search-player [label]="player2" [alreadySelected]="alreadySelectedPlayers()" (selectedPlayer)="onSelectedPlayer($event)"></app-search-player>
 <span>{{status}}</span>
